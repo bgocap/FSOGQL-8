@@ -2,9 +2,7 @@ import { ALL_BOOKS } from "../services/queries";
 import { useQuery } from "@apollo/client";
 
 const Books = () => {
-  const result = useQuery(ALL_BOOKS, {
-    pollInterval: 2000,
-  });
+  const result = useQuery(ALL_BOOKS);
   if (result.loading) {
     return <div>loading...</div>;
   }
@@ -13,7 +11,6 @@ const Books = () => {
   return (
     <div>
       <h2>books</h2>
-
       <table>
         <tbody>
           <tr>
