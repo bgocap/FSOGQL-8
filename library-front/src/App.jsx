@@ -1,7 +1,5 @@
 import { useState } from "react";
-import Authors from "./components/Authors";
-import Books from "./components/Books";
-import NewBook from "./components/NewBook";
+import { NavLink, Outlet } from "react-router-dom";
 import "./App.css";
 
 const App = () => {
@@ -9,17 +7,21 @@ const App = () => {
 
   return (
     <div>
-      <div>
-        <button onClick={() => setPage("authors")}>authors</button>
-        <button onClick={() => setPage("books")}>books</button>
-        {/* <button onClick={() => setPage("add")}>add book</button> */}
-      </div>
+      <nav>
+        <NavLink to="authors" unstable_viewTransition>
+          <button>Authors</button>
+        </NavLink>
 
-      <Authors show={page === "authors"} />
-
-      <Books show={page === "books"} />
-
-      {/* <NewBook show={page === "add"} /> */}
+        <NavLink to="books" unstable_viewTransition>
+          <button>Books</button>
+        </NavLink>
+        <NavLink to="addBook" unstable_viewTransition>
+          <button>Add Book</button>
+        </NavLink>
+      </nav>
+      <main>
+        <Outlet />
+      </main>
     </div>
   );
 };
