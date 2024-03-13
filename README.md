@@ -1,7 +1,7 @@
 <h1>Full Stack Web Development Open - Part 8</h1>
 
 GraphQL</br>
-Exercises are commits. Done **11** out of _26_
+Exercises are commits. Done **12** out of _26_
 </br></br>
 
 <h3>library</h3>
