@@ -3,6 +3,7 @@ import { useQuery } from "@apollo/client";
 
 const Books = () => {
   const result = useQuery(ALL_BOOKS);
+  console.log(result);
   if (result.loading) {
     return <div>loading...</div>;
   }

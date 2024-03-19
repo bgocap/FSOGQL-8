@@ -1,6 +1,25 @@
 const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
 const { v4: uuid } = require("uuid");
+const mongoose = require("mongoose");
+const Book = require("./models/book");
+const Author = require("./models/author");
+const book = require("./models/book");
+
+require("dotenv").config();
+
+const MONGODB_URI = process.env.MONGODB_URI;
+
+console.log("connecting to", MONGODB_URI);
+
+mongoose
+  .connect(MONGODB_URI)
+  .then(() => {
+    console.log("connected to MongoDB");
+  })
+  .catch((error) => {
+    console.log("error connection to MongoDB:", error.message);
+  });
 
 let authors = [
   {
@@ -84,7 +103,7 @@ const typeDefs = `
 
   type Book {
     title:String!
-    author:String!
+    author:Author!
     published:Int!
     id:String!
     genres:[String]!
@@ -120,21 +139,23 @@ const typeDefs = `
 
 const resolvers = {
   Query: {
-    bookCount: () => books.length,
-    authorCount: () => authors.length,
-    allBooks: (root, args) => {
+    bookCount: async () => Book.collection.countDocuments(),
+    authorCount: async () => Author.collection.countDocuments(),
+    allBooks: async (root, args) => Book /*{
+      
       if (!args.author && !args.genre) {
-        return books;
+        return Book.find({});
       } else {
-        const filteredBooks = () =>
+        return Book;
+         const filteredBooks = async () =>
           args.author
-            ? books.filter((book) => book.author === args.author)
+            ? Book.collection.filter((book) => book.author === args.author)
             : books;
         return args.genre
           ? filteredBooks().filter((book) => book.genres.includes(args.genre))
-          : filteredBooks();
+          : filteredBooks(); 
       }
-    },
+    },*/,
 
     allAuthors: () =>
       authors.map((author) => {
