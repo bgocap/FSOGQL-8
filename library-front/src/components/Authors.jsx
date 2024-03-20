@@ -3,6 +3,7 @@ import { ALL_AUTHORS, EDIT_AUTHOR } from "../services/queries";
 import { useState } from "react";
 
 const SetBirthYear = ({ authors }) => {
+  console.log(authors);
   const [name, setName] = useState(authors[0].name);
   const [bornYear, setBornYear] = useState("");
   const [editBirthYear] = useMutation(EDIT_AUTHOR, {

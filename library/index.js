@@ -4,7 +4,6 @@ const { v4: uuid } = require("uuid");
 const mongoose = require("mongoose");
 const Book = require("./models/book");
 const Author = require("./models/author");
-const book = require("./models/book");
 
 require("dotenv").config();
 
@@ -21,7 +20,7 @@ mongoose
     console.log("error connection to MongoDB:", error.message);
   });
 
-let authors = [
+/* let authors = [
   {
     name: "Robert Martin",
     id: "afa51ab0-344d-11e9-a414-719c6709cf3e",
@@ -38,16 +37,16 @@ let authors = [
     born: 1821,
   },
   {
-    name: "Joshua Kerievsky", // birthyear not known
+    name: "Joshua Kerievsky",
     id: "afa5b6f2-344d-11e9-a414-719c6709cf3e",
   },
   {
-    name: "Sandi Metz", // birthyear not known
+    name: "Sandi Metz",
     id: "afa5b6f3-344d-11e9-a414-719c6709cf3e",
   },
-];
+]; */
 
-let books = [
+/* let books = [
   {
     title: "Clean Code",
     published: 2008,
@@ -97,13 +96,13 @@ let books = [
     id: "afa5de04-344d-11e9-a414-719c6709cf3e",
     genres: ["classic", "revolution"],
   },
-];
+]; */
 
 const typeDefs = `
 
   type Book {
     title:String!
-    author:Author!
+    author:Author
     published:Int!
     id:String!
     genres:[String]!
@@ -141,7 +140,7 @@ const resolvers = {
   Query: {
     bookCount: async () => Book.collection.countDocuments(),
     authorCount: async () => Author.collection.countDocuments(),
-    allBooks: async (root, args) => Book /*{
+    allBooks: async () => Book.find({}) /*{
       
       if (!args.author && !args.genre) {
         return Book.find({});
@@ -157,13 +156,13 @@ const resolvers = {
       }
     },*/,
 
-    allAuthors: () =>
-      authors.map((author) => {
+    allAuthors: () => Author,
+    /*       authors.map((author) => {
         return {
           ...author,
           bookCount: books.filter((book) => book.author === author.name).length,
         };
-      }),
+      }), */
   },
   Mutation: {
     addBook: (root, args) => {
