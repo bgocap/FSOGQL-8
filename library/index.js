@@ -1,4 +1,5 @@
 const { ApolloServer } = require("@apollo/server");
+const { GraphQLError } = require("graphql");
 const { startStandaloneServer } = require("@apollo/server/standalone");
 const { v4: uuid } = require("uuid");
 const mongoose = require("mongoose");
@@ -71,15 +72,36 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args) => {
-      const authorObj = await Author.findOne({ name: args.author });
-      const newBook = new Book({ ...args, author: authorObj.id });
-      const response = await newBook.save();
-      return response.populate("author");
+      const author = await Author.findOne({ name: args.author });
+      const newBook = new Book({ ...args, author: author.id });
+      try {
+        const response = await newBook.save();
+        return response.populate("author");
+      } catch (error) {
+        throw new GraphQLError("Create new Book failed", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            invalidArgs: args.name,
+            error,
+          },
+        });
+      }
     },
     editAuthor: async (root, args) => {
-      const authorObj = await Author.findOne({ name: args.name });
-      authorObj.born = args.setBornTo;
-      const response = await authorObj.save();
+      const updatedAuthor = await Author.findOne({ name: args.name });
+      updatedAuthor.born = args.setBornTo;
+      try {
+        const response = await updatedAuthor.save();
+        return response;
+      } catch (error) {
+        throw new GraphQLError("Edit author failed", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            invalidArgs: args.name,
+            error,
+          },
+        });
+      }
     },
   },
 };
