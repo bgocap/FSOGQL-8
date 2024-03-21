@@ -102,7 +102,7 @@ const typeDefs = `
 
   type Book {
     title:String!
-    author:Author
+    author:Author!
     published:Int!
     id:String!
     genres:[String]!
@@ -156,7 +156,7 @@ const resolvers = {
       }
     },*/,
 
-    allAuthors: () => Author,
+    allAuthors: async () => Author.find({}),
     /*       authors.map((author) => {
         return {
           ...author,
@@ -165,17 +165,25 @@ const resolvers = {
       }), */
   },
   Mutation: {
-    addBook: (root, args) => {
-      const book = { ...args, id: uuid() };
-      if (!authors.some((author) => author.name === args.author)) {
+    addBook: async (root, args) => {
+      const authorObj = await Author.findOne({ name: args.author });
+      console.log(authorObj.id);
+      const newBook = new Book({ ...args, author: authorObj.id });
+      const response = await newBook.save();
+      return response.populate("author");
+
+      /*       if (!authors.some((author) => authors.name === args.author)) {
         const newAuthor = { name: args.author, id: uuid() };
         authors = authors.concat(newAuthor);
       }
       books = books.concat(book);
-      return book;
+      return book; */
     },
-    editAuthor: (root, args) => {
-      const currentAuthor = authors.find((author) => author.name === args.name);
+    editAuthor: async (root, args) => {
+      const authorObj = await Author.findOne({ name: args.name });
+      authorObj.born = args.setBornTo;
+      const response = await authorObj.save();
+      /* const currentAuthor = authors.find((author) => author.name === args.name);
       if (!currentAuthor) {
         return null;
       }
@@ -185,7 +193,7 @@ const resolvers = {
         author.name === args.name ? updatedAuthor : author
       );
 
-      return updatedAuthor;
+      return updatedAuthor; */
     },
   },
 };

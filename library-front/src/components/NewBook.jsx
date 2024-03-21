@@ -20,7 +20,6 @@ const NewBook = () => {
         title,
         author,
         published,
-        genre,
         genres,
       },
     });
