@@ -1,7 +1,7 @@
 <h1>Full Stack Web Development Open - Part 8</h1>
 
 GraphQL</br>
-Exercises are commits. Done **17** out of _26_
+Exercises are commits. Done **18** out of _26_
 </br></br>
 
 <h3>library</h3>
@@ -28,6 +28,9 @@ Exercises are commits. Done **17** out of _26_
  ┣ 📂src
  ┃ ┣ 📂components
  ┃ ┃ ┣ 📜Books.jsx
+ ┃ ┃ ┣ 📜LoggedUserReducer.jsx
+ ┃ ┃ ┣ 📜LoggedUserContext.jsx
+ ┃ ┃ ┣ 📜Login.jsx
  ┃ ┃ ┣ 📜Authors.jsx
  ┃ ┃ ┗ 📜NewBook.jsx
  ┃ ┣ 📂services

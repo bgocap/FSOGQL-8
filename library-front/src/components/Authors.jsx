@@ -1,15 +1,14 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { ALL_AUTHORS, EDIT_AUTHOR } from "../services/queries";
+import { useLoggedUser } from "./LoggedUserContext";
 import { useState } from "react";
 
 const SetBirthYear = ({ authors }) => {
-  console.log(authors);
   const [name, setName] = useState(authors[0].name);
   const [bornYear, setBornYear] = useState("");
   const [editBirthYear] = useMutation(EDIT_AUTHOR, {
     refetchQueries: [{ query: ALL_AUTHORS }],
   });
-  console.log(bornYear);
 
   const submit = async (event) => {
     event.preventDefault();
@@ -52,6 +51,7 @@ const SetBirthYear = ({ authors }) => {
 };
 
 const Authors = () => {
+  const { state, dispatch } = useLoggedUser();
   const result = useQuery(ALL_AUTHORS);
   if (result.loading) {
     return <div>loading...</div>;
@@ -77,7 +77,7 @@ const Authors = () => {
           ))}
         </tbody>
       </table>
-      <SetBirthYear authors={authors} />
+      {state.user && <SetBirthYear authors={authors} />}
     </div>
   );
 };
