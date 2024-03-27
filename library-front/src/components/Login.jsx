@@ -12,16 +12,17 @@ const Login = () => {
 
   const [login, result] = useMutation(LOGIN, {
     onError: (error) => {
-      console.log(error.graphQLErrors[0].message);
+      //console.log(error.graphQLErrors[0].message);
     },
     onCompleted: (data) => {
       const token = data.login.value;
-      localStorage.setItem("booksAppUserToken", token);
+      localStorage.setItem("booksAppUser", token);
       dispatch({
         type: "SET_USER",
-        payload: { username: "exampleUser", token: token },
+        payload: { token: token },
       });
       navigate("/books");
+      console.log("state after login:", state);
     },
   });
 
@@ -34,14 +35,14 @@ const Login = () => {
     <div>
       <form onSubmit={submit}>
         <div>
-          username{" "}
+          username
           <input
             value={username}
             onChange={({ target }) => setUsername(target.value)}
           />
         </div>
         <div>
-          password{" "}
+          password
           <input
             type="password"
             value={password}

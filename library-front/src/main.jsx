@@ -20,9 +20,10 @@ import NewBook from "./components/NewBook.jsx";
 import Login from "./components/Login.jsx";
 import { setContext } from "@apollo/client/link/context";
 import { LoggedUserProvider } from "./components/LoggedUserContext.jsx";
+import Recommended from "./components/Recommended.jsx";
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem("booksAppUserToken");
+  const token = localStorage.getItem("booksAppUser");
   return {
     headers: {
       ...headers,
@@ -45,6 +46,7 @@ const router = createBrowserRouter(
       <Route path="authors" element={<Authors />} />
       <Route path="books" element={<Books />} />
       <Route path="addBook" element={<NewBook />} />
+      <Route path="recommended" element={<Recommended />} />
       <Route path="login" element={<Login />} />
     </Route>
   )

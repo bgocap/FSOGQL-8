@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ALL_BOOKS } from "../services/queries";
 import { useQuery } from "@apollo/client";
+import { useLoggedUser } from "./LoggedUserContext";
 
 const Book = ({ book }) => (
   <tr>
@@ -11,9 +12,10 @@ const Book = ({ book }) => (
 );
 
 const Books = () => {
+  const { state, dispatch } = useLoggedUser();
   const result = useQuery(ALL_BOOKS);
   const [filter, setFilter] = useState(null);
-
+  console.log("current state:", state);
   if (result.loading) {
     return <div>loading...</div>;
   }

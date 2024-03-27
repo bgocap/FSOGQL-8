@@ -2,7 +2,6 @@ import { useMutation } from "@apollo/client";
 import { useState } from "react";
 import { ADD_BOOK, ALL_AUTHORS, ALL_BOOKS } from "../services/queries";
 import { useLoggedUser } from "./LoggedUserContext";
-import { useNavigate } from "react-router-dom";
 
 const NewBook = () => {
   const { state, dispatch } = useLoggedUser();
@@ -14,11 +13,6 @@ const NewBook = () => {
   const [createBook] = useMutation(ADD_BOOK, {
     refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
   });
-  const navigate = useNavigate();
-
-  if (!state.user) {
-    navigate("/books");
-  }
 
   const submit = async (event) => {
     event.preventDefault();

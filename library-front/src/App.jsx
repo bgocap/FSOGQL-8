@@ -28,6 +28,9 @@ const App = () => {
         </NavLink>
         {state.user && (
           <>
+            <NavLink to="recommended" unstable_viewTransition>
+              <button>Recommended</button>
+            </NavLink>
             <NavLink to="addBook" unstable_viewTransition>
               <button>Add Book</button>
             </NavLink>

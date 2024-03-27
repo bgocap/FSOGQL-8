@@ -7,8 +7,8 @@ export const LoggedUserProvider = ({ children }) => {
   const [state, dispatch] = useReducer(loggedUserReducer, initialState);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem("booksAppUserToken");
-    if (savedUser) {
+    const savedUser = { token: localStorage.getItem("booksAppUser") };
+    if (savedUser.token) {
       dispatch({ type: "SET_USER", payload: savedUser });
     }
   }, []);
