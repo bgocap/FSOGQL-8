@@ -54,6 +54,7 @@ const typeDefs = `
     authorCount:Int!
     allBooks(author:String, genre:String): [Book!]!
     allAuthors: [Author!]!
+    allGenres: [String]!
     me: User
   }
 
@@ -85,10 +86,22 @@ const resolvers = {
     authorCount: async () => Author.collection.countDocuments(),
     allBooks: async (root, args) =>
       args.genre
-        ? Book.find({ genres: [args.genre] }).populate("author")
+        ? Book.find({ genres: args.genre }).populate("author")
         : Book.find({}).populate("author"),
 
     allAuthors: async () => Author.find({}),
+    allGenres: async () => {
+      const allBooks = await Book.find({});
+      const result = [
+        ...allBooks.reduce((allG, book) => {
+          book.genres.forEach((genre) => allG.add(genre));
+          console.log(allG);
+          return allG;
+        }, new Set()),
+      ];
+
+      return result;
+    },
     me: async (root, args, context) => {
       return context.currentUser;
     },

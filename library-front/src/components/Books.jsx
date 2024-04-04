@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
-import { ALL_BOOKS } from "../services/queries";
+import { useState } from "react";
+import { ALL_BOOKS, ALL_GENRES } from "../services/queries";
 import { useQuery } from "@apollo/client";
-import { useLoggedUser } from "./LoggedUserContext";
 
 const Book = ({ book }) => (
   <tr>
@@ -12,24 +11,19 @@ const Book = ({ book }) => (
 );
 
 const Books = () => {
-  const { state, dispatch } = useLoggedUser();
-  const result = useQuery(ALL_BOOKS);
   const [filter, setFilter] = useState(null);
-  console.log("current state:", state);
-  if (result.loading) {
+  const booksQuery = useQuery(ALL_BOOKS, {
+    variables: { filter },
+  });
+  const genresQuery = useQuery(ALL_GENRES);
+
+  if (booksQuery.loading || genresQuery.loading) {
     return <div>loading...</div>;
   }
 
-  const books = result.data.allBooks;
+  const books = booksQuery.data.allBooks;
 
-  const allGenres = books
-    .reduce((allGenresArray, book) => {
-      book.genres.map((genre) => allGenresArray.push(genre));
-      return allGenresArray;
-    }, [])
-    .filter((value, index, self) => {
-      return self.indexOf(value) === index;
-    });
+  const allGenres = genresQuery.data.allGenres;
 
   return (
     <div>
