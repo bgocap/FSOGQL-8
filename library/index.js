@@ -95,7 +95,6 @@ const resolvers = {
       const result = [
         ...allBooks.reduce((allG, book) => {
           book.genres.forEach((genre) => allG.add(genre));
-          console.log(allG);
           return allG;
         }, new Set()),
       ];

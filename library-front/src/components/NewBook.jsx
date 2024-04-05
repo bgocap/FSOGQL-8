@@ -1,17 +1,35 @@
 import { useMutation } from "@apollo/client";
 import { useState } from "react";
-import { ADD_BOOK, ALL_AUTHORS, ALL_BOOKS } from "../services/queries";
-import { useLoggedUser } from "./LoggedUserContext";
+import {
+  ADD_BOOK,
+  ALL_AUTHORS,
+  ALL_BOOKS,
+  ALL_GENRES,
+} from "../services/queries";
 
 const NewBook = () => {
-  const { state, dispatch } = useLoggedUser();
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [yearPublished, setYearPublished] = useState("");
   const [genre, setGenre] = useState("");
   const [genres, setGenres] = useState([]);
   const [createBook] = useMutation(ADD_BOOK, {
-    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
+    refetchQueries: [
+      { query: ALL_BOOKS },
+      { query: ALL_GENRES },
+      { query: ALL_AUTHORS },
+    ],
+    //didn't work -> returns prevData===null all the time
+    /* update: (cache, response) => {
+            cache.updateQuery({ query: ALL_BOOKS }, ({ prevData }) => {
+        console.log(prevData);
+        if (!prevData) return prevData;
+        return {
+          allBooks: [...prevData.allBooks].concat(response.data.addBook),
+        };
+      });
+    },
+    }, */
   });
 
   const submit = async (event) => {
