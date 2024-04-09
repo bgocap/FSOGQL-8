@@ -2,9 +2,9 @@ import { useMutation } from "@apollo/client";
 import { useState } from "react";
 import {
   ADD_BOOK,
-  ALL_AUTHORS,
   ALL_BOOKS,
   ALL_GENRES,
+  ALL_AUTHORS,
 } from "../services/queries";
 
 const NewBook = () => {
@@ -19,6 +19,10 @@ const NewBook = () => {
       { query: ALL_GENRES },
       { query: ALL_AUTHORS },
     ],
+    onError: (error) => {
+      const messages = error.graphQLErrors.map((e) => e.message).join("\n");
+      console.log(messages);
+    },
     //didn't work -> returns prevData===null all the time
     /* update: (cache, response) => {
             cache.updateQuery({ query: ALL_BOOKS }, ({ prevData }) => {

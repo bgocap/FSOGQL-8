@@ -1,7 +1,7 @@
 <h1>Full Stack Web Development Open - Part 8</h1>
 
 GraphQL</br>
-Exercises are commits. Done **22** out of _26_
+Exercises are commits. Done **23** out of _26_
 </br></br>
 
 <h3>library</h3>
@@ -13,6 +13,8 @@ Exercises are commits. Done **22** out of _26_
  ┃ ┣ 📜author.js
  ┃ ┗ 📜book.js
  ┣ 📜index.js
+ ┣ 📜schema.js
+ ┣ 📜resolvers.js
  ┣ 📜package-lock.json
  ┣ 📜package.json
 
