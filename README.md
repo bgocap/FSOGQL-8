@@ -1,7 +1,8 @@
 <h1>Full Stack Web Development Open - Part 8</h1>
 
 GraphQL</br>
-Exercises are commits. Done **23** out of _26_
+Exercises are commits. Done **24** out of _26_
+Exercises 22,23,24,25 done in library-front-2 w/ react router (no createBrowserRouter)
 </br></br>
 
 <h3>library</h3>

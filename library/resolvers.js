@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const Book = require("./models/book");
 const Author = require("./models/author");
 const User = require("./models/user");
-const book = require("./models/book");
+/* const book = require("./models/book"); */
 
 const resolvers = {
   Query: {
@@ -41,22 +41,31 @@ const resolvers = {
             code: "BAD_REQUEST",
           },
         });
-      } else {
-        const author = await Author.findOne({ name: args.author });
-        const newBook = new Book({ ...args, author: author.id });
-        try {
-          const response = await newBook.save();
-        } catch (error) {
-          throw new GraphQLError("Create new Book failed", {
-            extensions: {
-              code: "BAD_USER_INPUT",
-              invalidArgs: args.name,
-              error,
-            },
-          });
+      }
+
+      try {
+        let author = await Author.findOne({ name: args.author });
+
+        if (!author) {
+          const newAuthor = new Author({ name: args.author });
+          const createdAuthor = await newAuthor.save();
+          author = createdAuthor;
         }
-        pubsub.publish("BOOK_ADDED", { bookAdded: newBook });
+
+        const newBook = new Book({ ...args, author: author.id });
+        const response = await newBook.save();
+        pubsub.publish("BOOK_ADDED", {
+          bookAdded: response.populate("author"),
+        });
         return response.populate("author");
+      } catch (error) {
+        throw new GraphQLError("Create new Book failed", {
+          extensions: {
+            code: "BAD_USER_INPUT",
+            invalidArgs: args.name,
+            error,
+          },
+        });
       }
     },
     editAuthor: async (root, args, context) => {
