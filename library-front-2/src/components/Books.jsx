@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ALL_BOOKS, ALL_GENRES } from "../services/queries";
 import { useQuery } from "@apollo/client";
 
@@ -16,7 +16,7 @@ const Book = ({ book }) => (
   </tr>
 );
 
-const Books = ({}) => {
+const Books = () => {
   const [filter, setFilter] = useState(null);
   const booksQuery = useQuery(ALL_BOOKS, {
     variables: { filter },

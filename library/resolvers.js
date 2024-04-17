@@ -11,7 +11,7 @@ const resolvers = {
   Query: {
     bookCount: async () => Book.collection.countDocuments(),
     authorCount: async () => Author.collection.countDocuments(),
-    allBooks: async (root, args) =>
+    allBooks: async (root, args, context) =>
       args.genre
         ? Book.find({ genres: args.genre }).populate("author")
         : Book.find({}).populate("author"),

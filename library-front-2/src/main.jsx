@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import {
@@ -24,11 +23,10 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
+const wsLink = new GraphQLWsLink(createClient({ url: "ws://localhost:4000" }));
 const httpLink = createHttpLink({
   uri: "http://localhost:4000",
 });
-
-const wsLink = new GraphQLWsLink(createClient({ url: "ws://localhost:4000" }));
 
 const splitLink = split(
   ({ query }) => {
@@ -42,12 +40,6 @@ const splitLink = split(
   authLink.concat(httpLink)
 );
 
-/* const client = new ApolloClient({
-  link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
-  connectToDevTools: true,
-}); */
-
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: splitLink,
@@ -56,8 +48,6 @@ const client = new ApolloClient({
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <ApolloProvider client={client}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
+    <App />
   </ApolloProvider>
 );

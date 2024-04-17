@@ -13,16 +13,30 @@ import NavBar from "./components/NavBar";
 import { useApolloClient } from "@apollo/client";
 import Recommended from "./components/Recommended";
 import { useSubscription } from "@apollo/client";
-import { BOOK_ADDED } from "./services/queries";
+import { BOOK_ADDED, ALL_BOOKS } from "./services/queries";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState();
   const client = useApolloClient();
 
   useSubscription(BOOK_ADDED, {
-    onData: ({ data }) => {
+    onData: async ({ data, client }) => {
       window.alert(`Book has been added`);
-      console.log(data);
+      const addedBook = data.data.bookAdded;
+      console.log(addedBook);
+      /*       const cachedData = client.cache.readQuery({
+        query: ALL_BOOKS,
+        variables: { filter: null },
+      });
+      console.log(cachedData); */
+      client.cache.updateQuery(
+        { query: ALL_BOOKS, variables: { filter: null } },
+        ({ allBooks }) => {
+          return {
+            allBooks: allBooks.concat(addedBook),
+          };
+        }
+      );
     },
     onError: (error) => {
       console.log(error);

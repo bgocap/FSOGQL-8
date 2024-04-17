@@ -81,7 +81,7 @@ const Authors = ({ isLoggedIn }) => {
           {authors.map((a) => (
             <tr key={a.name} className=" border border-solid border-slate-700">
               <td className="px-1.5 py-2 border border-solid border-slate-700">
-                <h4 className="font-semibold">{a.name}r</h4>
+                <h4 className="font-semibold">{a.name}</h4>
               </td>
               <td className="px-1.5 py-2 text-center border border-solid border-slate-700">
                 {a.born}
