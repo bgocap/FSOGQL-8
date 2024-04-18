@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 const Book = require("./models/book");
 const Author = require("./models/author");
 const User = require("./models/user");
-/* const book = require("./models/book"); */
 
 const resolvers = {
   Query: {
@@ -16,7 +15,15 @@ const resolvers = {
         ? Book.find({ genres: args.genre }).populate("author")
         : Book.find({}).populate("author"),
 
-    allAuthors: async () => Author.find({}),
+    allAuthors: async () =>
+      Author.find({})
+        .populate("books", { title: 1 })
+        .lean()
+        .then((result) => {
+          return result.map((author) => {
+            return { ...author, bookCount: author.books.length };
+          });
+        }),
     allGenres: async () => {
       const allBooks = await Book.find({});
       const result = [
@@ -50,10 +57,18 @@ const resolvers = {
           const newAuthor = new Author({ name: args.author });
           const createdAuthor = await newAuthor.save();
           author = createdAuthor;
+          /* pubsub.publish("AUTHOR_ADDED", {
+            createdAuthor: createdAuthor.populate("books"),
+          }); */
         }
 
         const newBook = new Book({ ...args, author: author.id });
         const response = await newBook.save();
+
+        //Adds the new book to the booksArray in author
+        author.books = author.books.concat(response.id);
+        await author.save();
+
         pubsub.publish("BOOK_ADDED", {
           bookAdded: response.populate("author"),
         });

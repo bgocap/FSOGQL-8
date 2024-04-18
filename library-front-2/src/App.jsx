@@ -24,11 +24,6 @@ const App = () => {
       window.alert(`Book has been added`);
       const addedBook = data.data.bookAdded;
       console.log(addedBook);
-      /*       const cachedData = client.cache.readQuery({
-        query: ALL_BOOKS,
-        variables: { filter: null },
-      });
-      console.log(cachedData); */
       client.cache.updateQuery(
         { query: ALL_BOOKS, variables: { filter: null } },
         ({ allBooks }) => {

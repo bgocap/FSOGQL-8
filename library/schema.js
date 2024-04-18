@@ -21,7 +21,7 @@ const typeDefs = `
     name:String!
     id:String!
     born:Int
-    bookCount:Int!
+    bookCount:Int
   }
   
   type Subscription {
